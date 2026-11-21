@@ -14,7 +14,7 @@ CodeSync is a personal dashboard for bringing public coding-profile progress int
 
 ## Run locally
 
-Prerequisites: Node.js 20 or newer and npm.
+Prerequisites: Node.js 22.12 or newer and npm.
 
 ```bash
 npm install
@@ -41,6 +41,16 @@ For a deployed version, configure a server-side proxy and set `VITE_API_PROXY_UR
 ```
 
 This is needed because some coding platforms do not permit direct requests from a browser hosted on another origin.
+
+## GitHub Pages deployment
+
+The frontend is configured for `https://ikshita22.github.io/CodeSync/`, with Vite's base path set to `/CodeSync/`. Navigation uses React state rather than URL routes, so no SPA redirect page is needed.
+
+In the repository's **Settings > Pages**, select **GitHub Actions** as the source. The **Deploy GitHub Pages** workflow builds with Node.js 22 and publishes `dist` whenever changes reach `main`. To redeploy manually, open **Actions > Deploy GitHub Pages > Run workflow** and select `main`. Wait for the deployment job to succeed before treating the site as published.
+
+If an existing server-side proxy is available, add its public base URL as the repository Actions variable `VITE_API_PROXY_URL` under **Settings > Secrets and variables > Actions > Variables**, then rerun the workflow. Vite embeds this value in public JavaScript; never put credentials in it. The proxy must support the routes above and allow requests from `https://ikshita22.github.io`.
+
+GitHub Pages only serves static files and cannot run the development proxy. Without a separately hosted proxy, LeetCode, Codeforces, and CodeChef live data remains subject to the platforms' cross-origin restrictions and may fail. GitHub public-profile data uses GitHub's API directly and does not need this proxy (API rate limits still apply). Demo mode and browser-local saved profiles remain available; HackerRank remains unsupported. No proxy host is provisioned by this workflow.
 
 ## Privacy
 
